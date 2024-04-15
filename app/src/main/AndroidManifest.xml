@@ -14,9 +14,6 @@
             android:theme="@style/Theme.MediaAndroid"
             tools:targetApi="31">
         <activity
-                android:name=".AudioPlayer"
-                android:exported="false" />
-        <activity
                 android:name=".MainActivity"
                 android:exported="true"
                 android:label="@string/app_name"
@@ -27,6 +24,17 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".AudioListActivity" android:exported="true">
+        </activity>
+        <activity android:name=".VideoListActivity" android:exported="true">
+        </activity>
+        <activity
+                android:name=".AudioPlayer"
+                android:exported="false"/>
+        <activity android:name=".AddOnlineAudioActivity" android:exported="true">
+        </activity>
+        <activity android:name=".VideoPlayer" />
+
     </application>
 
 </manifest>

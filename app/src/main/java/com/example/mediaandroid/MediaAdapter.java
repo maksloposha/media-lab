@@ -10,16 +10,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AudioAdapter extends RecyclerView.Adapter<AudioAdapter.AudioViewHolder> {
+public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.AudioViewHolder> {
 
-    List<AudioModel> audios = new ArrayList<>();
+    List<MediaModel> audios = new ArrayList<>();
     Context context;
 
-    public AudioAdapter (Context context,List<AudioModel> audios){
+    public MediaAdapter(Context context, List<MediaModel> audios){
         this.context = context;
         this.audios = audios;
     }
@@ -33,28 +34,31 @@ public class AudioAdapter extends RecyclerView.Adapter<AudioAdapter.AudioViewHol
 
     @Override
     public void onBindViewHolder(@NonNull AudioViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        AudioModel audioModel = audios.get(position);
-        holder.titleText.setText(audioModel.getTitle());
-        holder.pathText.setText(audioModel.getPath());
-        String path = audioModel.getPath();
+        MediaModel mediaModel = audios.get(position);
+        holder.titleText.setText(mediaModel.getTitle());
+        holder.pathText.setText(mediaModel.getPath());
 
         ArrayList<String> audioPaths = new ArrayList<>();
-        for (AudioModel audio : audios) {
+        for (MediaModel audio : audios) {
             audioPaths.add(audio.getPath());
         }
 
+        initCardView(holder, position, audioPaths);
+
+    }
+
+    public void initCardView(@NotNull AudioViewHolder holder, int position, ArrayList<String> mediaPaths) {
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context,AudioPlayer.class);
+                Intent intent = new Intent(context, AudioPlayer.class);
                 // Pass the list of audio paths through the intent
-                intent.putStringArrayListExtra("AudioPaths_list", audioPaths);
+                intent.putStringArrayListExtra("AudioPaths_list", mediaPaths);
                 // Pass the selected position to start playing from that position
                 intent.putExtra("SelectedPosition", position);
                 context.startActivity(intent);
             }
         });
-
     }
 
     @Override
@@ -62,7 +66,7 @@ public class AudioAdapter extends RecyclerView.Adapter<AudioAdapter.AudioViewHol
         return audios.size();
     }
 
-    public void setAudioList(List<AudioModel> filteredList) {
+    public void setAudioList(List<MediaModel> filteredList) {
         audios = filteredList;
     }
 

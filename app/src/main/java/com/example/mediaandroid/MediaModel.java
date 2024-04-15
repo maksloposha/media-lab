@@ -1,9 +1,9 @@
 package com.example.mediaandroid;
 
-public class AudioModel {
+public class MediaModel {
     String title,path;
 
-    public AudioModel(String title, String path) {
+    public MediaModel(String title, String path) {
         this.title = title;
         this.path = path;
     }

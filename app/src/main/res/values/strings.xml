@@ -39,4 +39,11 @@
     </string>
     <string name="search_media">Search media</string>
     <string name="media_name">Media name</string>
-</resources>
+    <string name="add_media">Add media</string>
+    <string name="title">Title</string>
+    <string name="url">URL</string>
+    <string name="add">Add</string>
+    <string name="back">Back to main</string>
+    <string name="audioFiles">View audio files</string>
+    <string name="videoFiles">View video files</string>
+\</resources>
