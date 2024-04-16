@@ -36,7 +36,6 @@ public class AudioListActivity extends AppCompatActivity {
         adapter = new MediaAdapter(this, audioList);
         recyclerView.setAdapter(adapter);
 
-        //To Get All Audio Files from device
         getAudioFiles();
 
         findViewById(R.id.buttonAddOnlineAudio).setOnClickListener(new View.OnClickListener() {
@@ -89,7 +88,6 @@ public class AudioListActivity extends AppCompatActivity {
             }
             cursor.close();
         }
-//        audioList.add(new MediaModel("Online Audio 1", "https://download.samplelib.com/mp3/sample-3s.mp3"));
 
         filteredList.addAll(audioList);
         adapter.notifyDataSetChanged();

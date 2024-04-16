@@ -70,9 +70,9 @@ public class VideoListActivity extends AppCompatActivity {
         Cursor cursor = contentResolver.query(videoUri, projection, null, null, null);
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                String title = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE));
+//                String title = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE));
                 String path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
-                MediaModel mediaModel = new MediaModel(title, path);
+                MediaModel mediaModel = new MediaModel("f", path);
                 videoList.add(mediaModel);
             }
             cursor.close();
