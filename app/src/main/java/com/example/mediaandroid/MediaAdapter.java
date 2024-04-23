@@ -71,6 +71,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.AudioViewHol
 
     public void setMediaList(List<MediaModel> filteredList) {
         medias = filteredList;
+        notifyDataSetChanged();
     }
 
     static class AudioViewHolder extends RecyclerView.ViewHolder{
