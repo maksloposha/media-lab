@@ -74,9 +74,6 @@ public class AudioPlayer extends AppCompatActivity {
             }
         };
 
-        int duration = mediaPlayer.getDuration();
-        String sDuration = convertFormat(duration);
-        playerdur.setText(sDuration);
 
         // Initialize MediaPlayer
         mediaPlayer = new MediaPlayer();
@@ -164,15 +161,6 @@ public class AudioPlayer extends AppCompatActivity {
 
             }
         });
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                pause.setVisibility(View.GONE);
-                play.setVisibility(View.VISIBLE);
-                mediaPlayer.seekTo(0);
-            }
-        });
-
     }
 
     // Method to play the next audio
@@ -223,6 +211,9 @@ public class AudioPlayer extends AppCompatActivity {
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
+                    int duration = mediaPlayer.getDuration();
+                    String sDuration = convertFormat(duration);
+                    playerdur.setText(sDuration);
                     playAudio(); // Start playback after successful preparation
                 }
             });

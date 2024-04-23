@@ -32,16 +32,15 @@ public class VideoPlayer extends AppCompatActivity {
         videoView = findViewById(R.id.video_view);
 
         mediaPlayer = new MediaPlayer();
-
-        initializeMediaPlayer(videoPaths.get(currentPosition));
-
-
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                mediaPlayer.seekTo(0);
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                Log.e("MediaPlayerError", "MediaPlayer error occurred: " + what + ", Extra: " + extra);
+                return false;
             }
         });
+
+        initializeMediaPlayer(videoPaths.get(currentPosition));
 
     }
 
