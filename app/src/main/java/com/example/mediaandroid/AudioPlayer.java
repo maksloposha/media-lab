@@ -25,13 +25,15 @@ public class AudioPlayer extends AppCompatActivity {
     SeekBar seekBar;
 
     private List<String> audioPaths;
+    private List<String> titles;
     private int currentPosition;
 
-    ImageView rewind, play, pause, forward,play_next, play_previous;
+    ImageView rewind, play, pause, forward, play_next, play_previous;
 
     MediaPlayer mediaPlayer;
     Handler handler;
     Runnable runnable;
+    TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +41,11 @@ public class AudioPlayer extends AppCompatActivity {
         setContentView(R.layout.activity_audio_player);
 
         // Retrieve the list of audio paths and selected position from the intent
-        audioPaths = getIntent().getStringArrayListExtra("AudioPaths_list");
+        audioPaths = getIntent().getStringArrayListExtra("MediaPaths_list");
         currentPosition = getIntent().getIntExtra("SelectedPosition", 0);
-
+        title = findViewById(R.id.titleAudio);
+        titles = getIntent().getStringArrayListExtra("Titles");
+        title.setText(titles.get(currentPosition));
 
         playerpos = findViewById(R.id.playerPosition);
         playerdur = findViewById(R.id.playerDuration);
@@ -59,8 +63,14 @@ public class AudioPlayer extends AppCompatActivity {
         runnable = new Runnable() {
             @Override
             public void run() {
-                seekBar.setProgress(mediaPlayer.getCurrentPosition());
-                handler.postDelayed(this,500);
+                if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                    int currentPosition = mediaPlayer.getCurrentPosition();
+                    int duration = mediaPlayer.getDuration();
+                    playerpos.setText(convertFormat(currentPosition));
+                    playerdur.setText(convertFormat(duration));
+                    seekBar.setProgress(currentPosition);
+                }
+                handler.postDelayed(this, 500);
             }
         };
 
@@ -73,8 +83,6 @@ public class AudioPlayer extends AppCompatActivity {
 
         // Initialize and start playback using the first audio path
         initializeMediaPlayer(audioPaths.get(currentPosition));
-        playAudio();
-
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,7 +90,7 @@ public class AudioPlayer extends AppCompatActivity {
                 pause.setVisibility(View.VISIBLE);
                 mediaPlayer.start();
                 seekBar.setMax(mediaPlayer.getDuration());
-                handler.postDelayed(runnable,0);
+                handler.postDelayed(runnable, 0);
             }
         });
 
@@ -101,8 +109,8 @@ public class AudioPlayer extends AppCompatActivity {
             public void onClick(View view) {
                 int currentPos = mediaPlayer.getCurrentPosition();
                 int duration = mediaPlayer.getDuration();
-                if (mediaPlayer.isPlaying() && duration != currentPos);
-                currentPos = currentPos +5000;
+                if (mediaPlayer.isPlaying() && duration != currentPos) ;
+                currentPos = currentPos + 5000;
                 playerpos.setText(convertFormat(currentPos));
                 mediaPlayer.seekTo(currentPos);
 
@@ -114,8 +122,8 @@ public class AudioPlayer extends AppCompatActivity {
             public void onClick(View view) {
                 int currentPos = mediaPlayer.getCurrentPosition();
 
-                if (mediaPlayer.isPlaying() && currentPos > 5000){
-                    currentPos = currentPos -5000;
+                if (mediaPlayer.isPlaying() && currentPos > 5000) {
+                    currentPos = currentPos - 5000;
                     playerpos.setText(convertFormat(currentPos));
                     mediaPlayer.seekTo(currentPos);
                 }
@@ -140,7 +148,7 @@ public class AudioPlayer extends AppCompatActivity {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                if (b){
+                if (b) {
                     mediaPlayer.seekTo(i);
                 }
                 playerpos.setText(convertFormat(mediaPlayer.getCurrentPosition()));
@@ -174,8 +182,15 @@ public class AudioPlayer extends AppCompatActivity {
             stopAudio();
             initializeMediaPlayer(audioPaths.get(currentPosition));
             playAudio();
+            title.setText(titles.get(currentPosition));
         } else {
-            // You can handle the case when there are no more songs (wrap around, display a message, etc.)
+            currentPosition = 0;
+            if (!audioPaths.isEmpty()) {
+                stopAudio();
+                initializeMediaPlayer(audioPaths.get(currentPosition));
+                playAudio();
+                title.setText(titles.get(currentPosition));
+            }
         }
     }
 
@@ -183,12 +198,13 @@ public class AudioPlayer extends AppCompatActivity {
     private void playPreviousAudio() {
         if (currentPosition > 0) {
             currentPosition--;
-            stopAudio();
-            initializeMediaPlayer(audioPaths.get(currentPosition));
-            playAudio();
-        } else {
-            // You can handle the case when you are at the beginning of the list
+        }else{
+            currentPosition = audioPaths.size() - 1;
         }
+        title.setText(titles.get(currentPosition));
+        stopAudio();
+        initializeMediaPlayer(audioPaths.get(currentPosition));
+        playAudio();
     }
 
     // Method to stop the currently playing audio
@@ -199,7 +215,6 @@ public class AudioPlayer extends AppCompatActivity {
         }
     }
 
-    // Method to initialize MediaPlayer with the given audio path
     private void initializeMediaPlayer(String path) {
         try {
             mediaPlayer.setDataSource(path);
@@ -223,6 +238,10 @@ public class AudioPlayer extends AppCompatActivity {
             mediaPlayer.start();
             play.setVisibility(View.GONE);
             pause.setVisibility(View.VISIBLE);
+            int duration = mediaPlayer.getDuration();
+            playerdur.setText(convertFormat(duration));
+            seekBar.setMax(mediaPlayer.getDuration());
+            handler.postDelayed(runnable, 0);
         }
     }
 
@@ -235,10 +254,10 @@ public class AudioPlayer extends AppCompatActivity {
     }
 
     @SuppressLint("DefaultLocale")
-    private String convertFormat(int duration){
-        return String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(duration),
-                TimeUnit.MILLISECONDS.toMinutes(duration) -
-                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)));
-
+    private String convertFormat(int duration) {
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(duration);
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(duration) - TimeUnit.MINUTES.toSeconds(minutes);
+        return String.format("%02d:%02d", minutes, seconds);
     }
+
 }

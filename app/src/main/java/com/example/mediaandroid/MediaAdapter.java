@@ -17,12 +17,12 @@ import java.util.List;
 
 public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.AudioViewHolder> {
 
-    List<MediaModel> audios = new ArrayList<>();
+    protected List<MediaModel> medias = new ArrayList<>();
     Context context;
 
     public MediaAdapter(Context context, List<MediaModel> audios){
         this.context = context;
-        this.audios = audios;
+        this.medias = audios;
     }
 
     @NonNull
@@ -34,28 +34,31 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.AudioViewHol
 
     @Override
     public void onBindViewHolder(@NonNull AudioViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        MediaModel mediaModel = audios.get(position);
+        MediaModel mediaModel = medias.get(position);
         holder.titleText.setText(mediaModel.getTitle());
         holder.pathText.setText(mediaModel.getPath());
 
         ArrayList<String> audioPaths = new ArrayList<>();
-        for (MediaModel audio : audios) {
+        ArrayList<String> titles = new ArrayList<>();
+        for (MediaModel audio : medias) {
             audioPaths.add(audio.getPath());
+            titles.add(audio.getTitle());
         }
 
-        initCardView(holder, position, audioPaths);
+        initCardView(holder, position, audioPaths, titles);
 
     }
 
-    public void initCardView(@NotNull AudioViewHolder holder, int position, ArrayList<String> mediaPaths) {
+    public void initCardView(@NotNull AudioViewHolder holder, int position, ArrayList<String> mediaPaths, ArrayList<String> titles) {
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, AudioPlayer.class);
                 // Pass the list of audio paths through the intent
-                intent.putStringArrayListExtra("AudioPaths_list", mediaPaths);
+                intent.putStringArrayListExtra("MediaPaths_list", mediaPaths);
                 // Pass the selected position to start playing from that position
                 intent.putExtra("SelectedPosition", position);
+                intent.putStringArrayListExtra("Titles", titles);
                 context.startActivity(intent);
             }
         });
@@ -63,11 +66,11 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.AudioViewHol
 
     @Override
     public int getItemCount() {
-        return audios.size();
+        return medias.size();
     }
 
     public void setAudioList(List<MediaModel> filteredList) {
-        audios = filteredList;
+        medias = filteredList;
     }
 
     static class AudioViewHolder extends RecyclerView.ViewHolder{

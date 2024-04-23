@@ -4,7 +4,9 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.MediaController;
+import android.widget.TextView;
 import android.widget.VideoView;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,8 +23,10 @@ public class VideoPlayer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_players);
 
-        List<String> videoPaths = getIntent().getStringArrayListExtra("VideoPaths_list");
+        List<String> videoPaths = getIntent().getStringArrayListExtra("MediaPaths_list");
         int currentPosition = getIntent().getIntExtra("SelectedPosition", 0);
+        TextView title = findViewById(R.id.videoTitle);
+        title.setText(getIntent().getStringArrayListExtra("Titles").get(currentPosition));
 
         mediaPlayer = new MediaPlayer();
         videoView = findViewById(R.id.video_view);
