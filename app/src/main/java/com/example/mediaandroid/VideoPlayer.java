@@ -11,7 +11,9 @@ import android.widget.VideoView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class VideoPlayer extends AppCompatActivity {
 
@@ -47,7 +49,13 @@ public class VideoPlayer extends AppCompatActivity {
 
     private void initializeMediaPlayer(String path) {
         try {
-            mediaPlayer.setDataSource(path);
+            Map<String, String> headers = new HashMap<>();
+            headers.put("Content-Type", "video/mp4"); // change content type if necessary
+            headers.put("Accept-Ranges", "bytes");
+            headers.put("Status", "206");
+            headers.put("Cache-control", "no-cache");
+            Uri uri = Uri.parse(path);
+            mediaPlayer.setDataSource(getApplicationContext(), uri, headers);
             mediaPlayer.prepareAsync();
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
@@ -55,6 +63,7 @@ public class VideoPlayer extends AppCompatActivity {
                     // Set the media player for the video view
                     MediaController mediaController = new MediaController(VideoPlayer.this);
                     videoView.setMediaController(mediaController);
+
 
                     // Set the video URI for the VideoView
                     videoView.setVideoURI(Uri.parse(path));

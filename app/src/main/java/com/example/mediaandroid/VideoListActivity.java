@@ -1,7 +1,6 @@
 package com.example.mediaandroid;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -97,7 +96,7 @@ public class VideoListActivity extends AppCompatActivity {
                 filteredList.add(audio);
             }
         }
-        adapter.setAudioList(filteredList);
+        adapter.setMediaList(filteredList);
     }
 
     @Override
@@ -109,6 +108,7 @@ public class VideoListActivity extends AppCompatActivity {
             String title = data.getStringExtra("title");
             String url = data.getStringExtra("url");
             videoList.add(new MediaModel(title, url));
+            adapter.setMediaList(videoList);
         }
     }
 

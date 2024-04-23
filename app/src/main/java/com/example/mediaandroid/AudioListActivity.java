@@ -25,8 +25,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.mediaandroid.VideoListActivity.REQUEST_MEDIA_PERMISSION;
-
 public class AudioListActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_ADD_ONLINE_AUDIO = 1001;
     private static final int REQUEST_MEDIA_PERMISSION = 3;
@@ -109,7 +107,7 @@ public class AudioListActivity extends AppCompatActivity {
                 filteredList.add(audio);
             }
         }
-        adapter.setAudioList(filteredList);
+        adapter.setMediaList(filteredList);
         adapter.notifyDataSetChanged();
     }
 

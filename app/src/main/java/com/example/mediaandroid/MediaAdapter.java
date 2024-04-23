@@ -69,13 +69,13 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.AudioViewHol
         return medias.size();
     }
 
-    public void setAudioList(List<MediaModel> filteredList) {
+    public void setMediaList(List<MediaModel> filteredList) {
         medias = filteredList;
     }
 
     static class AudioViewHolder extends RecyclerView.ViewHolder{
 
-        TextView titleText,pathText;
+        TextView titleText, pathText;
         CardView cardView;
 
         public AudioViewHolder(@NonNull View itemView) {
